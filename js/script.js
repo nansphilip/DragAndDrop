@@ -41,8 +41,15 @@ const getElementArea = (element) => {
 
 // Stores mouse position
 const storesMousePosition = (event) => {
-    // Checks if event is touch or mouse
-    const eventType = event.touches ? event.touches[0] : event;
+    // Checks if event is touch or mouse and uses the appropriate object
+    let eventType;
+
+    // Utilisé pour les événements touchend où le doigt vient de quitter l'écran
+    if (event.changedTouches) eventType = event.changedTouches[0];
+    // Utilisé pour les événements touchstart et touchmove où le doigt est toujours sur l'écran
+    else if (event.touches) eventType = event.touches[0];
+    // Utilisé pour les événements de souris
+    else eventType = event;
 
     mousePos = {
         x: eventType.clientX,
@@ -102,32 +109,31 @@ const movesToContainer = (position, areaList) => {
 };
 
 
-// Mouse and touch events
+// DRAG EVENTS
 rectangleEl.on('mousedown touchstart', (event) => {
     // Stops propagation and default behavior
-    // event.stopPropagation();
-    event.preventDefault();
-
+    if (event.type === 'touchstart') event.preventDefault();
+    
     // Stores initial mouse position
     storesMousePosition(event);
-
+    
     // Tracks mouse movement
-    $(window).on('mousemove touchmove', dragAndDrop);
+    // $(window).on('touchmove', dragAndDrop, { passive: false });
+    if (event.type === 'touchstart') $(window).on('touchmove', dragAndDrop);
+    else $(window).on('mousemove', dragAndDrop);
 });
 
+// DROP EVENTS
 $(window).on('mouseup touchend', (event) => {
-    // Stops tracking mouse movement
     $(window).off('mousemove touchmove', dragAndDrop);
-
-    // Stores mouse position
+    
     storesMousePosition(event);
 
-    // Stores container areas
     const containerAreaList = [];
     for (const containerEl of containerElList) {
         containerAreaList.push(getElementArea(containerEl));
     }
 
-    // Checks if rectangle is inside container1 or container2
+    // Moves rectangle to container
     movesToContainer(mousePos, containerAreaList);
 });
