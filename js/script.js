@@ -94,7 +94,7 @@ const moveToContainer = (position, areaList) => {
 };
 
 
-// Events
+// Mouse events
 rectangleEl.on('mousedown', (event) => {
     // Stores initial mouse position
     mousePos = getMousePosition(event);
@@ -106,6 +106,32 @@ rectangleEl.on('mousedown', (event) => {
 $(window).on('mouseup', (event) => {
     // Stops tracking mouse movement
     $(window).off('mousemove', dragAndDrop);
+
+    // Stores mouse position
+    mousePos = getMousePosition(event);
+
+    // Stores container areas
+    const containerAreaList = [];
+    for (const containerEl of containerElList) {
+        containerAreaList.push(getElementArea(containerEl));
+    }
+
+    // Checks if rectangle is inside container1 or container2
+    moveToContainer(mousePos, containerAreaList);
+});
+
+// Touch events
+rectangleEl.on('touchstart', (event) => {
+    // Stores initial mouse position
+    mousePos = getMousePosition(event);
+
+    // Tracks mouse movement
+    $(window).on('touchmove', dragAndDrop);
+});
+
+$(window).on('touchend', (event) => {
+    // Stops tracking mouse movement
+    $(window).off('touchmove', dragAndDrop);
 
     // Stores mouse position
     mousePos = getMousePosition(event);
