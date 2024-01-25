@@ -28,17 +28,19 @@ const getElementSize = (element) => {
 
 // Returns element area
 const getElementArea = (element) => {
+    const position = getElementPosition(element);
+    const size = getElementSize(element);
     return {
-        start: getElementPosition(element),
+        start: position,
         end: {
-            x: (getElementPosition(element).x + getElementSize(element).width),
-            y: (getElementPosition(element).y + getElementSize(element).height)
+            x: position.x + size.width,
+            y: position.y + size.height
         }
-    }
+    };
 };
 
 // Stores mouse position
-const getMousePosition = (event) => {
+const storesMousePosition = (event) => {
     // Checks if event is touch or mouse
     const eventType = event.touches ? event.touches[0] : event;
 
@@ -57,7 +59,7 @@ const getMouseMovement = (event) => {
     }
 
     // Stores new mouse position
-    getMousePosition(event);
+    storesMousePosition(event);
 
     return {
         x: mouseMov.x,
@@ -78,7 +80,7 @@ const dragAndDrop = (event) => {
 };
 
 // Moves rectangle to container
-const moveToContainer = (position, areaList) => {
+const movesToContainer = (position, areaList) => {
     for (const index in areaList) {
         // Inside container
         if (areaList[index].start.x < position.x && position.x < areaList[index].end.x &&
@@ -103,7 +105,7 @@ const moveToContainer = (position, areaList) => {
 // Mouse and touch events
 rectangleEl.on('mousedown touchstart', (event) => {
     // Stores initial mouse position
-    getMousePosition(event);
+    storesMousePosition(event);
 
     // Tracks mouse movement
     $(window).on('mousemove touchmove', dragAndDrop);
@@ -114,7 +116,7 @@ $(window).on('mouseup touchend', (event) => {
     $(window).off('mousemove touchmove', dragAndDrop);
 
     // Stores mouse position
-    getMousePosition(event);
+    storesMousePosition(event);
 
     // Stores container areas
     const containerAreaList = [];
@@ -123,5 +125,5 @@ $(window).on('mouseup touchend', (event) => {
     }
 
     // Checks if rectangle is inside container1 or container2
-    moveToContainer(mousePos, containerAreaList);
+    movesToContainer(mousePos, containerAreaList);
 });
