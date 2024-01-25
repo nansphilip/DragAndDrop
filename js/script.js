@@ -75,10 +75,8 @@ const dragAndDrop = (event) => {
     const rectanglePos = getElementPosition(rectangleEl);
     const mouseMov = getMouseMovement(event);
 
-    // rectangleEl.css('left', (rectanglePos.x + mouseMov.x));
-    // rectangleEl.css('top', (rectanglePos.y + mouseMov.y));
-    rectangleEl.css('left', (rectanglePos.x + mouseMov.x) + 'px');
-    rectangleEl.css('top', (rectanglePos.y + mouseMov.y) + 'px');
+    rectangleEl.css('left', (rectanglePos.x + mouseMov.x));
+    rectangleEl.css('top', (rectanglePos.y + mouseMov.y));
 };
 
 // Moves rectangle to container
