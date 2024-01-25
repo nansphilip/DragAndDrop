@@ -108,7 +108,7 @@ const movesToContainer = (position, areaList) => {
 rectangleEl.on('mousedown touchstart', (event) => {
     // Stops propagation and default behavior
     // event.stopPropagation();
-    // event.preventDefault();
+    event.preventDefault();
 
     // Stores initial mouse position
     storesMousePosition(event);
