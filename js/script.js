@@ -52,31 +52,33 @@ const storesMousePosition = (event) => {
 
 // Returns mouse movement
 const getMouseMovement = (event) => {
+    // Checks if event is touch or mouse
+    const eventType = event.changedTouches ? event.changedTouches[0] : event;
+
     // Stores difference between new and old mouse position
     let mouseMov = {
-        x: event.clientX - mousePos.x,
-        y: event.clientY - mousePos.y
-    }
+        x: eventType.clientX - mousePos.x,
+        y: eventType.clientY - mousePos.y
+    };
 
     // Stores new mouse position
     storesMousePosition(event);
 
-    return {
-        x: mouseMov.x,
-        y: mouseMov.y
-    };
+    return mouseMov;
 };
 
 // Drag and drop
 const dragAndDrop = (event) => {
-    // Prevents default scroll behavior
-    event.preventDefault();
+    // Prevents default scroll behavior for touch events
+    if (event.type === 'touchmove') event.preventDefault();
 
     const rectanglePos = getElementPosition(rectangleEl);
     const mouseMov = getMouseMovement(event);
 
-    rectangleEl.css('left', (rectanglePos.x + mouseMov.x));
-    rectangleEl.css('top', (rectanglePos.y + mouseMov.y));
+    // rectangleEl.css('left', (rectanglePos.x + mouseMov.x));
+    // rectangleEl.css('top', (rectanglePos.y + mouseMov.y));
+    rectangleEl.css('left', (rectanglePos.x + mouseMov.x) + 'px');
+    rectangleEl.css('top', (rectanglePos.y + mouseMov.y) + 'px');
 };
 
 // Moves rectangle to container
@@ -104,6 +106,10 @@ const movesToContainer = (position, areaList) => {
 
 // Mouse and touch events
 rectangleEl.on('mousedown touchstart', (event) => {
+    // Stops propagation and default behavior
+    event.stopPropagation();
+    event.preventDefault();
+    
     // Stores initial mouse position
     storesMousePosition(event);
 
