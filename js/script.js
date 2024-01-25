@@ -64,6 +64,7 @@ const getMouseMovement = (event) => {
 
 // Drag and drop
 const dragAndDrop = (event) => {
+    event.preventDefault();
     const rectanglePos = getElementPosition(rectangleEl);
     const mouseMov = getMouseMovement(event);
 
@@ -94,44 +95,18 @@ const moveToContainer = (position, areaList) => {
 };
 
 
-// Mouse events
-rectangleEl.on('mousedown', (event) => {
+// Mouse and touch events
+rectangleEl.on('mousedown touchstart', (event) => {
     // Stores initial mouse position
     mousePos = getMousePosition(event);
 
     // Tracks mouse movement
-    $(window).on('mousemove', dragAndDrop);
+    $(window).on('mousemove touchmove', dragAndDrop);
 });
 
-$(window).on('mouseup', (event) => {
+$(window).on('mouseup touchend', (event) => {
     // Stops tracking mouse movement
-    $(window).off('mousemove', dragAndDrop);
-
-    // Stores mouse position
-    mousePos = getMousePosition(event);
-
-    // Stores container areas
-    const containerAreaList = [];
-    for (const containerEl of containerElList) {
-        containerAreaList.push(getElementArea(containerEl));
-    }
-
-    // Checks if rectangle is inside container1 or container2
-    moveToContainer(mousePos, containerAreaList);
-});
-
-// Touch events
-rectangleEl.on('touchstart', (event) => {
-    // Stores initial mouse position
-    mousePos = getMousePosition(event);
-
-    // Tracks mouse movement
-    $(window).on('touchmove', dragAndDrop);
-});
-
-$(window).on('touchend', (event) => {
-    // Stops tracking mouse movement
-    $(window).off('touchmove', dragAndDrop);
+    $(window).off('mousemove touchmove', dragAndDrop);
 
     // Stores mouse position
     mousePos = getMousePosition(event);
