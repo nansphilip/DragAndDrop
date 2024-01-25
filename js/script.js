@@ -37,11 +37,14 @@ const getElementArea = (element) => {
     }
 };
 
-// Returns mouse position
+// Stores mouse position
 const getMousePosition = (event) => {
-    return {
-        x: event.clientX,
-        y: event.clientY
+    // Checks if event is touch or mouse
+    const eventType = event.touches ? event.touches[0] : event;
+
+    mousePos = {
+        x: eventType.clientX,
+        y: eventType.clientY
     };
 };
 
@@ -54,7 +57,7 @@ const getMouseMovement = (event) => {
     }
 
     // Stores new mouse position
-    mousePos = getMousePosition(event);
+    getMousePosition(event);
 
     return {
         x: mouseMov.x,
@@ -64,7 +67,9 @@ const getMouseMovement = (event) => {
 
 // Drag and drop
 const dragAndDrop = (event) => {
+    // Prevents default scroll behavior
     event.preventDefault();
+
     const rectanglePos = getElementPosition(rectangleEl);
     const mouseMov = getMouseMovement(event);
 
@@ -98,7 +103,7 @@ const moveToContainer = (position, areaList) => {
 // Mouse and touch events
 rectangleEl.on('mousedown touchstart', (event) => {
     // Stores initial mouse position
-    mousePos = getMousePosition(event);
+    getMousePosition(event);
 
     // Tracks mouse movement
     $(window).on('mousemove touchmove', dragAndDrop);
@@ -109,7 +114,7 @@ $(window).on('mouseup touchend', (event) => {
     $(window).off('mousemove touchmove', dragAndDrop);
 
     // Stores mouse position
-    mousePos = getMousePosition(event);
+    getMousePosition(event);
 
     // Stores container areas
     const containerAreaList = [];
