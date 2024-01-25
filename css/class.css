@@ -1,0 +1,22 @@
+/* CONTAINERS */
+.container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    height: 4rem;
+    width: 6rem;
+
+    margin: 0.5rem;
+    border: 2px solid hsl(0, 0%, 0%);
+}
+
+/* ELEMENT */
+.element {
+    height: 2rem;
+    width: 3rem;
+
+    position: absolute;
+    background-color: hsl(175, 100%, 35%);
+}
